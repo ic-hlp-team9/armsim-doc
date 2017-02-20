@@ -1,0 +1,46 @@
+digraph G {
+    start [label="Ω" shape=Mdiamond];
+    stop [label="⊥" shape=Mdiamond];
+
+    input [shape=rectangle style=filled];
+    input -> UI [style=dashed dir=both];
+
+    subgraph cluster_0 {
+        node [style=filled];
+        lex -> parse -> assemble;
+        label = "frontend";
+        color = blue;
+    };
+
+    input -> lex [style=dotted];
+
+    subgraph cluster_1 {
+        node [style=filled];
+
+        fetch -> decode -> execute;
+        label = "emulator";
+        color=red;
+    };
+
+    subgraph cluster_2 {
+        node [style=filled shape=rectangle];
+        memory;
+        registers;
+
+        label = "Machine Representation";
+        color=purple;
+    } -> UI [style=dashed dir=both];
+
+    UI [shape=egg style=filled];
+
+    assemble -> fetch;
+    execute -> fetch;
+
+    assemble -> memory [style=dotted];
+    memory -> execute [style=dotted dir=both];
+    registers -> execute [style=dotted dir=both];
+    memory -> fetch [style=dotted dir=both];
+
+    start -> lex;
+    execute -> stop;
+}
